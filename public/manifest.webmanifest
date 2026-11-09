@@ -1,0 +1,38 @@
+{
+  "name": "GIFtoMP4 — Free GIF to Video Converter",
+  "short_name": "GIFtoMP4",
+  "description": "Convert animated GIFs to ultra-crisp H.264 MP4 videos 100% locally in your browser with zero uploads.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#E1E8F4",
+  "theme_color": "#166BF3",
+  "orientation": "any",
+  "categories": ["multimedia", "utilities", "productivity", "video"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

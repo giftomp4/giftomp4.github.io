@@ -1,0 +1,127 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Core Palette Tokens */
+  --warm-honey-gold: #ECB051;
+  --soft-sand-cream: #F2E2CA;
+  --electric-royal-blue: #166BF3;
+  --cool-ice-blue-tint: #E1E8F4;
+  --deep-midnight-slate: #0B1528;
+  --pure-canvas-white: #FFFFFF;
+
+  /* Light Mode Default Theme Tokens */
+  --background-primary: #E1E8F4;
+  --background-surface-card: #F2E2CA;
+  --workspace-box-bg: #FFFFFF;
+  --primary-action-button: #166BF3;
+  --primary-action-hover: #0F52BA;
+  --primary-action-text: #FFFFFF;
+  --secondary-accent-surface: #ECB051;
+  --highlight-pill-badge: #F2E2CA;
+  --border-color: #166BF3;
+  --text-primary: #0B1528;
+  --text-secondary: #166BF3;
+}
+
+html.dark {
+  /* Dark Mode Theme Tokens */
+  --background-primary: #0B1528;
+  --background-surface-card: #13223E;
+  --workspace-box-bg: #182B4E;
+  --primary-action-button: #ECB051;
+  --primary-action-hover: #F2E2CA;
+  --primary-action-text: #0B1528;
+  --secondary-accent-surface: #166BF3;
+  --highlight-pill-badge: #13223E;
+  --border-color: #ECB051;
+  --text-primary: #E1E8F4;
+  --text-secondary: #ECB051;
+}
+
+@layer base {
+  html {
+    background-color: var(--background-primary);
+    color: var(--text-primary);
+    scroll-behavior: smooth;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  body {
+    background-color: var(--background-primary);
+    color: var(--text-primary);
+    min-height: 100dvh;
+    overflow-x: hidden;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+}
+
+/* Custom Hero & Workspace styling */
+.hero-heading {
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+}
+
+.workspace-box {
+  background-color: var(--workspace-box-bg);
+  border: 2px solid var(--border-color);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.surface-card {
+  background-color: var(--background-surface-card);
+}
+
+.btn-primary-action {
+  background-color: var(--primary-action-button);
+  color: var(--primary-action-text);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-primary-action:hover {
+  background-color: var(--primary-action-hover);
+  transform: translateY(-2px);
+}
+
+.btn-primary-action:active {
+  transform: translateY(0px);
+}
+
+.dropzone-area {
+  border: 3px dashed #166BF3;
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html.dark .dropzone-area {
+  border-color: #ECB051;
+}
+
+.dropzone-area:hover,
+.dropzone-area.drag-over {
+  border-color: #ECB051;
+  background-color: rgba(242, 226, 202, 0.38);
+  transform: scale(1.005);
+}
+
+html.dark .dropzone-area:hover,
+html.dark .dropzone-area.drag-over {
+  border-color: #166BF3;
+  background-color: rgba(19, 34, 62, 0.75);
+}
+
+.progress-gradient-bar {
+  background: linear-gradient(90deg, #166BF3 0%, #ECB051 50%, #166BF3 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2.2s linear infinite;
+}
+
+/* Custom Scrollbar for Mode Pills */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

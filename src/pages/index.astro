@@ -1,0 +1,11 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GifConverterBox from '../components/GifConverterBox.astro';
+import FaqSection from '../components/FaqSection.astro';
+import { defaultLang } from '../i18n/ui';
+---
+
+<BaseLayout lang={defaultLang}>
+  <GifConverterBox lang={defaultLang} />
+  <FaqSection lang={defaultLang} />
+</BaseLayout>

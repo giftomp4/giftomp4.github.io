@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import GifConverterBox from '../../components/GifConverterBox.astro';
+import FaqSection from '../../components/FaqSection.astro';
+import { languages, defaultLang, type Locale } from '../../i18n/ui';
+
+export function getStaticPaths() {
+  return Object.keys(languages)
+    .filter((lang) => lang !== defaultLang)
+    .map((lang) => ({
+      params: { lang },
+    }));
+}
+
+const { lang } = Astro.params as { lang: Locale };
+---
+
+<BaseLayout lang={lang}>
+  <GifConverterBox lang={lang} />
+  <FaqSection lang={lang} />
+</BaseLayout>

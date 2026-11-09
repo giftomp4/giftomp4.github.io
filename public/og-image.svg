@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
+  <rect width="1200" height="630" fill="#0B1528"/>
+  <rect x="36" y="36" width="1128" height="558" rx="36" fill="#13223E" stroke="#ECB051" stroke-width="6" stroke-dasharray="18 12"/>
+  <rect x="96" y="100" width="320" height="56" rx="28" fill="#F2E2CA"/>
+  <text x="256" y="136" text-anchor="middle" fill="#0B1528" font-family="Inter, system-ui, sans-serif" font-size="22" font-weight="800">100% LOCAL • ZERO UPLOAD</text>
+  <text x="96" y="255" fill="#FFFFFF" font-family="Inter, system-ui, sans-serif" font-size="76" font-weight="900">GIFtoMP4 Studio</text>
+  <text x="96" y="340" fill="#ECB051" font-family="Inter, system-ui, sans-serif" font-size="44" font-weight="800">Free GIF to MP4 Converter Online (No Watermark)</text>
+  <text x="96" y="415" fill="#E1E8F4" font-family="Inter, system-ui, sans-serif" font-size="28" font-weight="600">90% Smaller H.264 yuv420p MP4 • Instagram &amp; TikTok Loop Multiplier</text>
+  <rect x="96" y="468" width="440" height="76" rx="22" fill="#166BF3" stroke="#ECB051" stroke-width="4"/>
+  <text x="316" y="516" text-anchor="middle" fill="#FFFFFF" font-family="Inter, system-ui, sans-serif" font-size="30" font-weight="800">giftomp4.github.io</text>
+</svg>

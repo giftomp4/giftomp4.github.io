@@ -1,0 +1,219 @@
+---
+import { useTranslations, getLocalizedPath, type Locale } from '../i18n/ui';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const homeUrl = getLocalizedPath(lang, '');
+---
+
+<div class="w-full max-w-5xl mx-auto px-3 sm:px-6 py-12 space-y-16 border-t-2 border-[#166BF3]/20 dark:border-[#ECB051]/20">
+  <!-- 1:1 Visual Breadcrumb Navigation (Home > Video & GIF Tools > Free GIF to MP4 Converter) -->
+  <nav aria-label="Breadcrumb" class="pt-2">
+    <ol class="flex flex-wrap items-center gap-2 text-sm font-bold text-[#0B1528]/80 dark:text-[#E1E8F4]/80">
+      <li>
+        <a href="https://giftomp4.github.io/" class="text-[#166BF3] dark:text-[#ECB051] hover:underline">
+          {t('nav.breadcrumb.home')}
+        </a>
+      </li>
+      <li aria-hidden="true" class="opacity-60">&gt;</li>
+      <li>
+        <a href={`${homeUrl}#tools-guide`} class="text-[#166BF3] dark:text-[#ECB051] hover:underline">
+          {t('nav.breadcrumb.tools')}
+        </a>
+      </li>
+      <li aria-hidden="true" class="opacity-60">&gt;</li>
+      <li class="text-[#0B1528] dark:text-[#E1E8F4]" aria-current="page">
+        {t('nav.breadcrumb.converter')}
+      </li>
+    </ol>
+  </nav>
+
+  <!-- Step-by-Step HowTo Section (1:1 Match with HowTo JSON-LD) -->
+  <section id="howto-guide" aria-labelledby="howto-heading">
+    <div class="text-center mb-8">
+      <h2 id="howto-heading" class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0B1528] dark:text-[#E1E8F4] mb-3">
+        {t('howto.name')}
+      </h2>
+      <p class="text-base sm:text-lg font-medium text-[#0B1528]/80 dark:text-[#E1E8F4]/80 max-w-3xl mx-auto">
+        {t('seo.guideSubtitle')}
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <article class="p-6 rounded-3xl bg-white dark:bg-[#182B4E] border-2 border-[#166BF3] dark:border-[#ECB051] shadow-sm">
+        <div class="w-11 h-11 rounded-2xl bg-[#166BF3] dark:bg-[#ECB051] text-white dark:text-[#0B1528] font-black text-lg flex items-center justify-center mb-4">
+          1
+        </div>
+        <h3 class="text-lg font-extrabold text-[#0B1528] dark:text-[#E1E8F4] mb-2">
+          {t('howto.step1.title')}
+        </h3>
+        <p class="text-sm sm:text-base font-medium text-[#0B1528]/80 dark:text-[#E1E8F4]/80 leading-relaxed">
+          {t('howto.step1.text')}
+        </p>
+      </article>
+
+      <article class="p-6 rounded-3xl bg-white dark:bg-[#182B4E] border-2 border-[#166BF3] dark:border-[#ECB051] shadow-sm">
+        <div class="w-11 h-11 rounded-2xl bg-[#166BF3] dark:bg-[#ECB051] text-white dark:text-[#0B1528] font-black text-lg flex items-center justify-center mb-4">
+          2
+        </div>
+        <h3 class="text-lg font-extrabold text-[#0B1528] dark:text-[#E1E8F4] mb-2">
+          {t('howto.step2.title')}
+        </h3>
+        <p class="text-sm sm:text-base font-medium text-[#0B1528]/80 dark:text-[#E1E8F4]/80 leading-relaxed">
+          {t('howto.step2.text')}
+        </p>
+      </article>
+
+      <article class="p-6 rounded-3xl bg-white dark:bg-[#182B4E] border-2 border-[#166BF3] dark:border-[#ECB051] shadow-sm">
+        <div class="w-11 h-11 rounded-2xl bg-[#166BF3] dark:bg-[#ECB051] text-white dark:text-[#0B1528] font-black text-lg flex items-center justify-center mb-4">
+          3
+        </div>
+        <h3 class="text-lg font-extrabold text-[#0B1528] dark:text-[#E1E8F4] mb-2">
+          {t('howto.step3.title')}
+        </h3>
+        <p class="text-sm sm:text-base font-medium text-[#0B1528]/80 dark:text-[#E1E8F4]/80 leading-relaxed">
+          {t('howto.step3.text')}
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <!-- Keyword-Rich Semantic SEO Architecture & GIF vs. MP4 Comparison Table -->
+  <section id="tools-guide" aria-labelledby="seo-guide-heading" class="space-y-8">
+    <div class="text-center">
+      <h2 id="seo-guide-heading" class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0B1528] dark:text-[#E1E8F4] mb-3">
+        {t('seo.guideTitle')}
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <article class="p-6 rounded-3xl bg-[#F2E2CA] dark:bg-[#13223E] border-2 border-[#166BF3] dark:border-[#ECB051]">
+        <h3 class="text-lg font-extrabold text-[#0B1528] dark:text-[#ECB051] mb-2">
+          {t('seo.card1.title')}
+        </h3>
+        <p class="text-sm sm:text-base font-medium text-[#0B1528]/85 dark:text-[#E1E8F4]/85 leading-relaxed">
+          {t('seo.card1.body')}
+        </p>
+      </article>
+
+      <article class="p-6 rounded-3xl bg-[#F2E2CA] dark:bg-[#13223E] border-2 border-[#166BF3] dark:border-[#ECB051]">
+        <h3 class="text-lg font-extrabold text-[#0B1528] dark:text-[#ECB051] mb-2">
+          {t('seo.card2.title')}
+        </h3>
+        <p class="text-sm sm:text-base font-medium text-[#0B1528]/85 dark:text-[#E1E8F4]/85 leading-relaxed">
+          {t('seo.card2.body')}
+        </p>
+      </article>
+
+      <article class="p-6 rounded-3xl bg-[#F2E2CA] dark:bg-[#13223E] border-2 border-[#166BF3] dark:border-[#ECB051]">
+        <h3 class="text-lg font-extrabold text-[#0B1528] dark:text-[#ECB051] mb-2">
+          {t('seo.card3.title')}
+        </h3>
+        <p class="text-sm sm:text-base font-medium text-[#0B1528]/85 dark:text-[#E1E8F4]/85 leading-relaxed">
+          {t('seo.card3.body')}
+        </p>
+      </article>
+    </div>
+
+    <!-- GIF vs. H.264 MP4 File Size & Compatibility Comparison Table -->
+    <div class="rounded-3xl bg-white dark:bg-[#182B4E] border-2 border-[#166BF3] dark:border-[#ECB051] overflow-hidden shadow-md">
+      <div class="px-6 py-4 bg-[#166BF3] dark:bg-[#ECB051] text-white dark:text-[#0B1528]">
+        <h3 class="text-lg sm:text-xl font-black">
+          {t('seo.tableTitle')}
+        </h3>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-sm sm:text-base">
+          <thead>
+            <tr class="bg-[#F2E2CA] dark:bg-[#13223E] text-[#0B1528] dark:text-[#ECB051] border-b-2 border-[#166BF3]/30 dark:border-[#ECB051]/30">
+              <th class="py-3.5 px-5 font-extrabold">{t('seo.tableColFeature')}</th>
+              <th class="py-3.5 px-5 font-extrabold">{t('seo.tableColGif')}</th>
+              <th class="py-3.5 px-5 font-extrabold">{t('seo.tableColMp4')}</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#E1E8F4] dark:divide-[#13223E] font-medium text-[#0B1528] dark:text-[#E1E8F4]">
+            <tr>
+              <td class="py-3.5 px-5 font-bold">1080p 5-Second Clip Size</td>
+              <td class="py-3.5 px-5 text-red-700 dark:text-red-300 font-semibold">18.4 MB – 28.0 MB</td>
+              <td class="py-3.5 px-5 text-[#166BF3] dark:text-[#ECB051] font-extrabold">1.1 MB – 1.8 MB (93% Smaller)</td>
+            </tr>
+            <tr>
+              <td class="py-3.5 px-5 font-bold">Color Depth &amp; Fidelity</td>
+              <td class="py-3.5 px-5">8-bit (256 Colors per frame, dithered)</td>
+              <td class="py-3.5 px-5 font-extrabold">24-bit TrueColor (16.7 Million Colors, YUV420p)</td>
+            </tr>
+            <tr>
+              <td class="py-3.5 px-5 font-bold">Instagram Reels &amp; TikTok Upload</td>
+              <td class="py-3.5 px-5">Rejected (Unsupported format / Too short)</td>
+              <td class="py-3.5 px-5 font-extrabold">100% Accepted (With 3x–5x Auto-Loop Preset)</td>
+            </tr>
+            <tr>
+              <td class="py-3.5 px-5 font-bold">Browser CPU &amp; Battery Impact</td>
+              <td class="py-3.5 px-5">High CPU software decoding</td>
+              <td class="py-3.5 px-5 font-extrabold">Hardware GPU Accelerated (&lt;video playsinline&gt;)</td>
+            </tr>
+            <tr>
+              <td class="py-3.5 px-5 font-bold">Web Streaming Start (-movflags)</td>
+              <td class="py-3.5 px-5">Must buffer heavy LZW blocks</td>
+              <td class="py-3.5 px-5 font-extrabold">Instant playback (+faststart MOOV atom)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section (1:1 Match with FAQPage JSON-LD) -->
+  <section id="faq" aria-labelledby="faq-heading">
+    <div class="text-center mb-10">
+      <h2 id="faq-heading" class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0B1528] dark:text-[#E1E8F4] mb-3">
+        {t('faq.title')}
+      </h2>
+      <p class="text-base sm:text-lg font-medium text-[#0B1528]/80 dark:text-[#E1E8F4]/80 max-w-2xl mx-auto">
+        {t('faq.subtitle')}
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <article class="p-6 rounded-3xl bg-[#F2E2CA] dark:bg-[#13223E] border-2 border-[#166BF3] dark:border-[#ECB051] shadow-sm">
+        <h3 class="text-lg font-extrabold text-[#0B1528] dark:text-[#ECB051] mb-2">
+          {t('faq.q1')}
+        </h3>
+        <p class="text-sm sm:text-base font-medium text-[#0B1528]/85 dark:text-[#E1E8F4]/85 leading-relaxed">
+          {t('faq.a1')}
+        </p>
+      </article>
+
+      <article class="p-6 rounded-3xl bg-[#F2E2CA] dark:bg-[#13223E] border-2 border-[#166BF3] dark:border-[#ECB051] shadow-sm">
+        <h3 class="text-lg font-extrabold text-[#0B1528] dark:text-[#ECB051] mb-2">
+          {t('faq.q2')}
+        </h3>
+        <p class="text-sm sm:text-base font-medium text-[#0B1528]/85 dark:text-[#E1E8F4]/85 leading-relaxed">
+          {t('faq.a2')}
+        </p>
+      </article>
+
+      <article class="p-6 rounded-3xl bg-[#F2E2CA] dark:bg-[#13223E] border-2 border-[#166BF3] dark:border-[#ECB051] shadow-sm">
+        <h3 class="text-lg font-extrabold text-[#0B1528] dark:text-[#ECB051] mb-2">
+          {t('faq.q3')}
+        </h3>
+        <p class="text-sm sm:text-base font-medium text-[#0B1528]/85 dark:text-[#E1E8F4]/85 leading-relaxed">
+          {t('faq.a3')}
+        </p>
+      </article>
+
+      <article class="p-6 rounded-3xl bg-[#F2E2CA] dark:bg-[#13223E] border-2 border-[#166BF3] dark:border-[#ECB051] shadow-sm">
+        <h3 class="text-lg font-extrabold text-[#0B1528] dark:text-[#ECB051] mb-2">
+          {t('faq.q4')}
+        </h3>
+        <p class="text-sm sm:text-base font-medium text-[#0B1528]/85 dark:text-[#E1E8F4]/85 leading-relaxed">
+          {t('faq.a4')}
+        </p>
+      </article>
+    </div>
+  </section>
+</div>

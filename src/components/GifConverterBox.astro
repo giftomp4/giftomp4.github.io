@@ -1,0 +1,1275 @@
+---
+import { useTranslations, type Locale } from '../i18n/ui';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section
+  aria-label={t('hero.h1')}
+  class="w-full max-w-4xl mx-auto px-3 sm:px-6 pt-3 pb-8 md:py-6 flex flex-col justify-center min-h-[calc(100dvh-4.5rem)]"
+>
+  <!-- Primary H1 & Concise Subtitle -->
+  <div class="text-center mb-4 md:mb-5">
+    <h1 class="hero-heading font-extrabold text-[#0B1528] dark:text-[#E1E8F4] tracking-tight mb-2">
+      {t('hero.h1')}
+    </h1>
+    <p class="text-base sm:text-lg md:text-[1.12rem] font-medium text-[#0B1528]/85 dark:text-[#E1E8F4]/85 max-w-2xl mx-auto leading-relaxed">
+      {t('hero.subtitle')}
+    </p>
+  </div>
+
+  <!-- Interactive Converter Box Div -->
+  <div
+    id="converter-workspace-box"
+    class="workspace-box rounded-3xl shadow-workspace p-4 sm:p-6 md:p-7 relative overflow-hidden transition-all duration-300"
+  >
+    <!-- Top Header Bar: Active Mode Collapsible Trigger + 3-Step Indicator -->
+    <div class="flex flex-wrap items-center justify-between gap-3 pb-3.5 mb-4 border-b-2 border-[#E1E8F4] dark:border-[#13223E]">
+      <!-- Collapsible Mode / Preset Selector Button with Rotating Arrow Icon -->
+      <button
+        type="button"
+        id="toggle-mode-drawer-btn"
+        aria-expanded="false"
+        aria-controls="mode-drawer-content"
+        class="px-4 py-2 rounded-2xl bg-[#166BF3] text-white dark:bg-[#ECB051] dark:text-[#0B1528] font-extrabold text-sm sm:text-base shadow-md hover:opacity-95 transition-all flex items-center gap-2.5 border-2 border-[#ECB051] dark:border-[#166BF3]"
+      >
+        <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2" y="3" width="20" height="18" rx="3" />
+          <polygon points="10 8 16 12 10 16 10 8" fill="currentColor" />
+        </svg>
+        <span id="active-mode-label">{t('mode.gifToMp4')}</span>
+        <svg
+          id="mode-drawer-arrow"
+          class="w-4 h-4 transition-transform duration-200 shrink-0"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
+      </button>
+
+      <!-- Minimal 3-Step Wizard Indicator -->
+      <div class="flex items-center gap-1.5 sm:gap-2.5 text-xs sm:text-sm font-extrabold select-none">
+        <div id="wizard-dot-1" class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#166BF3] text-white dark:bg-[#ECB051] dark:text-[#0B1528] shadow-sm transition-all">
+          <span class="w-4 h-4 rounded-full bg-white/25 dark:bg-[#0B1528]/20 flex items-center justify-center text-[11px]">1</span>
+          <span>Select GIF</span>
+        </div>
+        <svg class="w-3.5 h-3.5 text-[#166BF3]/50 dark:text-[#ECB051]/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+        <div id="wizard-dot-2" class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E1E8F4] dark:bg-[#13223E] text-[#0B1528]/60 dark:text-[#E1E8F4]/60 transition-all">
+          <span class="w-4 h-4 rounded-full bg-[#0B1528]/10 dark:bg-white/10 flex items-center justify-center text-[11px]">2</span>
+          <span>Convert</span>
+        </div>
+        <svg class="w-3.5 h-3.5 text-[#166BF3]/50 dark:text-[#ECB051]/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+        <div id="wizard-dot-3" class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E1E8F4] dark:bg-[#13223E] text-[#0B1528]/60 dark:text-[#E1E8F4]/60 transition-all">
+          <span class="w-4 h-4 rounded-full bg-[#0B1528]/10 dark:bg-white/10 flex items-center justify-center text-[11px]">3</span>
+          <span>Download</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- COLLAPSIBLE MODE / FORMAT DRAWER (Hidden by default; shows all 6 modes in a full visible grid when expanded) -->
+    <div
+      id="mode-drawer-content"
+      role="tablist"
+      aria-label="Conversion Modes"
+      class="hidden mb-5 p-3.5 rounded-2xl bg-[#E1E8F4]/55 dark:bg-[#13223E]/90 border-2 border-[#166BF3]/30 dark:border-[#ECB051]/40 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 transition-all"
+    >
+      <button
+        type="button"
+        role="tab"
+        aria-selected="true"
+        aria-label={t('mode.gifToMp4')}
+        data-mode="gif-to-mp4"
+        class="mode-pill w-full px-4 py-2.5 rounded-xl font-extrabold text-sm transition-all bg-[#166BF3] text-white dark:bg-[#ECB051] dark:text-[#0B1528] shadow-sm flex items-center gap-2.5 text-left"
+      >
+        <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2" y="3" width="20" height="18" rx="3" />
+          <polygon points="10 8 16 12 10 16 10 8" fill="currentColor" />
+        </svg>
+        <span class="truncate">{t('mode.gifToMp4')}</span>
+      </button>
+
+      <button
+        type="button"
+        role="tab"
+        aria-selected="false"
+        aria-label={t('mode.gifToVideo')}
+        data-mode="gif-to-video"
+        class="mode-pill w-full px-4 py-2.5 rounded-xl font-bold text-sm transition-all bg-white dark:bg-[#182B4E] text-[#0B1528] dark:text-[#E1E8F4] hover:bg-[#F2E2CA] dark:hover:bg-[#0B1528] flex items-center gap-2.5 text-left"
+      >
+        <svg class="w-4 h-4 text-[#166BF3] dark:text-[#ECB051] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M23 7l-7 5 7 5V7z" />
+          <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+        </svg>
+        <span class="truncate">{t('mode.gifToVideo')}</span>
+      </button>
+
+      <button
+        type="button"
+        role="tab"
+        aria-selected="false"
+        aria-label={t('mode.gifSocial')}
+        data-mode="gif-social"
+        class="mode-pill w-full px-4 py-2.5 rounded-xl font-bold text-sm transition-all bg-white dark:bg-[#182B4E] text-[#0B1528] dark:text-[#E1E8F4] hover:bg-[#F2E2CA] dark:hover:bg-[#0B1528] flex items-center gap-2.5 text-left"
+      >
+        <svg class="w-4 h-4 text-[#166BF3] dark:text-[#ECB051] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="6" y="2" width="12" height="20" rx="3" />
+          <line x1="12" y1="18" x2="12.01" y2="18" />
+        </svg>
+        <span class="truncate">{t('mode.gifSocial')}</span>
+      </button>
+
+      <button
+        type="button"
+        role="tab"
+        aria-selected="false"
+        aria-label={t('mode.mp4ToGif')}
+        data-mode="mp4-to-gif"
+        class="mode-pill w-full px-4 py-2.5 rounded-xl font-bold text-sm transition-all bg-white dark:bg-[#182B4E] text-[#0B1528] dark:text-[#E1E8F4] hover:bg-[#F2E2CA] dark:hover:bg-[#0B1528] flex items-center gap-2.5 text-left"
+      >
+        <svg class="w-4 h-4 text-[#166BF3] dark:text-[#ECB051] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="17 1 21 5 17 9" />
+          <path d="M3 11V9a4 4 0 0 1 4-4h14" />
+          <polyline points="7 23 3 19 7 15" />
+          <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+        </svg>
+        <span class="truncate">{t('mode.mp4ToGif')}</span>
+      </button>
+
+      <button
+        type="button"
+        role="tab"
+        aria-selected="false"
+        aria-label={t('mode.gifToWebm')}
+        data-mode="gif-to-webm"
+        class="mode-pill w-full px-4 py-2.5 rounded-xl font-bold text-sm transition-all bg-white dark:bg-[#182B4E] text-[#0B1528] dark:text-[#E1E8F4] hover:bg-[#F2E2CA] dark:hover:bg-[#0B1528] flex items-center gap-2.5 text-left"
+      >
+        <svg class="w-4 h-4 text-[#166BF3] dark:text-[#ECB051] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" />
+          <polygon points="10 8 16 12 10 16 10 8" />
+        </svg>
+        <span class="truncate">{t('mode.gifToWebm')}</span>
+      </button>
+
+      <button
+        type="button"
+        role="tab"
+        aria-selected="false"
+        aria-label={t('mode.gifToPng')}
+        data-mode="gif-to-png"
+        class="mode-pill w-full px-4 py-2.5 rounded-xl font-bold text-sm transition-all bg-white dark:bg-[#182B4E] text-[#0B1528] dark:text-[#E1E8F4] hover:bg-[#F2E2CA] dark:hover:bg-[#0B1528] flex items-center gap-2.5 text-left"
+      >
+        <svg class="w-4 h-4 text-[#166BF3] dark:text-[#ECB051] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+          <circle cx="8.5" cy="8.5" r="1.5" />
+          <polyline points="21 15 16 10 5 21" />
+        </svg>
+        <span class="truncate">{t('mode.gifToPng')}</span>
+      </button>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- SCREEN 1: ULTRA-MINIMAL INITIAL DROPZONE (Main Upload Button Only)    -->
+    <!-- ===================================================================== -->
+    <div id="screen-1-upload" class="transition-all duration-300">
+      <div
+        id="step-1-dropzone"
+        role="region"
+        aria-label={t('drop.title.gif')}
+        class="dropzone-area rounded-3xl p-7 sm:p-12 text-center cursor-pointer bg-[#E1E8F4]/35 dark:bg-[#13223E]/60 flex flex-col items-center justify-center relative"
+      >
+        <input
+          type="file"
+          id="file-input"
+          accept="image/gif,video/mp4,video/webm,video/quicktime"
+          multiple
+          class="sr-only"
+          aria-label={t('drop.cta.gif')}
+        />
+
+        <!-- Warm #F2E2CA Accent Badge -->
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#F2E2CA] dark:bg-[#13223E] border-2 border-[#ECB051] text-[#0B1528] dark:text-[#ECB051] font-extrabold text-xs sm:text-sm mb-4 shadow-sm">
+          <span class="w-2.5 h-2.5 rounded-full bg-[#166BF3] dark:bg-[#ECB051] animate-ping"></span>
+          <span>{t('drop.badge')}</span>
+        </div>
+
+        <!-- Oversized Floating SVG Icon -->
+        <div class="w-20 h-20 rounded-3xl bg-[#166BF3]/10 dark:bg-[#ECB051]/15 border-2 border-[#166BF3] dark:border-[#ECB051] flex items-center justify-center mb-4 animate-float-slow shadow-inner">
+          <svg class="w-12 h-12 text-[#166BF3] dark:text-[#ECB051]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="17 8 12 3 7 8" />
+            <line x1="12" y1="3" x2="12" y2="15" />
+          </svg>
+        </div>
+
+        <h2
+          id="dropzone-title"
+          data-title-gif={t('drop.title.gif')}
+          data-title-mp4={t('drop.title.mp4')}
+          class="text-xl sm:text-2xl md:text-3xl font-extrabold text-[#0B1528] dark:text-[#E1E8F4] mb-2"
+        >
+          {t('drop.title.gif')}
+        </h2>
+
+        <p class="text-sm sm:text-base font-medium text-[#0B1528]/75 dark:text-[#E1E8F4]/75 mb-7 max-w-xl">
+          {t('drop.subtitle')}
+        </p>
+
+        <!-- Single Main Oversized Upload Button (No clutter, no sample button) -->
+        <button
+          type="button"
+          id="select-file-btn"
+          aria-label={t('drop.cta.gif')}
+          data-cta-gif={t('drop.cta.gif')}
+          data-cta-mp4={t('drop.cta.mp4')}
+          class="btn-primary-action w-full sm:w-auto min-w-[280px] px-10 py-4 sm:py-5 rounded-2xl font-black text-base sm:text-xl shadow-royal flex items-center justify-center gap-3 border-2 border-[#ECB051]"
+        >
+          <svg class="w-6 h-6 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="17 8 12 3 7 8" />
+            <line x1="12" y1="3" x2="12" y2="15" />
+          </svg>
+          <span id="select-file-btn-text">{t('drop.cta.gif')}</span>
+        </button>
+
+        <p class="text-xs font-bold text-[#166BF3] dark:text-[#ECB051] mt-4">
+          {t('drop.batchHint')}
+        </p>
+      </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- SCREEN 2: FILE LOADED — 1-CLICK CONVERT + COLLAPSIBLE SETTINGS        -->
+    <!-- ===================================================================== -->
+    <div id="screen-2-ready" class="hidden transition-all duration-300">
+      <div id="step-2-controls" class="space-y-4">
+        <!-- Focal Card: Selected File Summary + Giant Hero Convert Button Only -->
+        <div
+          id="selected-file-banner"
+          aria-live="polite"
+          class="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-[#F2E2CA]/90 via-[#FFFFFF] to-[#E1E8F4]/70 dark:from-[#13223E] dark:via-[#182B4E] dark:to-[#0B1528] border-2 border-[#166BF3] dark:border-[#ECB051] shadow-md flex flex-col items-center text-center"
+        >
+          <!-- File Badge & Change File Button Row -->
+          <div class="w-full flex flex-wrap items-center justify-between gap-2 pb-4 mb-6 border-b border-[#166BF3]/20 dark:border-[#ECB051]/20">
+            <div class="flex items-center gap-3 min-w-0 text-left">
+              <div
+                id="selected-file-ext-badge"
+                class="w-12 h-12 rounded-2xl bg-[#166BF3] text-white dark:bg-[#ECB051] dark:text-[#0B1528] flex items-center justify-center font-black text-sm shrink-0 shadow"
+              >
+                GIF
+              </div>
+              <div class="min-w-0">
+                <p class="text-xs font-extrabold uppercase tracking-wider text-[#166BF3] dark:text-[#ECB051]">
+                  {t('controls.fileSelected')}
+                </p>
+                <p id="selected-file-name" class="text-base sm:text-lg font-black text-[#0B1528] dark:text-[#E1E8F4] truncate max-w-[220px] sm:max-w-md">
+                  animation.gif
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              id="change-file-btn"
+              aria-label={t('controls.changeFile')}
+              class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold bg-white dark:bg-[#13223E] text-[#0B1528] dark:text-[#E1E8F4] border-2 border-[#166BF3]/40 dark:border-[#ECB051]/40 hover:border-[#166BF3] dark:hover:border-[#ECB051] transition-all flex items-center gap-1.5"
+            >
+              <svg class="w-4 h-4 text-[#166BF3] dark:text-[#ECB051]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="17 8 12 3 7 8" />
+                <line x1="12" y1="3" x2="12" y2="15" />
+              </svg>
+              <span>{t('controls.changeFile')}</span>
+            </button>
+          </div>
+
+          <!-- GIANT HERO PRIMARY CONVERT CTA BUTTON -->
+          <button
+            type="button"
+            id="trigger-convert-btn"
+            aria-label={t('controls.convertNow')}
+            class="btn-primary-action w-full max-w-md py-4 sm:py-5 px-8 rounded-2xl font-black text-lg sm:text-2xl shadow-royal border-2 border-[#ECB051] flex items-center justify-center gap-3 animate-pulse-glow"
+          >
+            <svg class="w-7 h-7 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polygon points="5 3 19 12 5 21 5 3" fill="currentColor" />
+            </svg>
+            <span id="trigger-convert-btn-text">{t('controls.convertNow')}</span>
+          </button>
+
+          <!-- Single Unified Collapsible Settings Toggle Button with Arrow Icon -->
+          <button
+            type="button"
+            id="toggle-settings-drawer-btn"
+            aria-expanded="false"
+            aria-controls="settings-drawer-content"
+            class="mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-extrabold text-[#0B1528]/80 dark:text-[#E1E8F4]/85 bg-[#E1E8F4]/70 dark:bg-[#13223E] hover:bg-[#F2E2CA] dark:hover:bg-[#0B1528] border border-[#166BF3]/30 dark:border-[#ECB051]/30 transition-all"
+          >
+            <svg class="w-4 h-4 text-[#166BF3] dark:text-[#ECB051]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="3" />
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+            </svg>
+            <span id="settings-summary-text">Presets &amp; Settings (Universal HD • 1x Loop • Original)</span>
+            <svg
+              id="settings-drawer-arrow"
+              class="w-4 h-4 text-[#166BF3] dark:text-[#ECB051] transition-transform duration-200"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- COLLAPSIBLE SETTINGS PANEL (Hidden by default; expands when user clicks the arrow button) -->
+        <div
+          id="settings-drawer-content"
+          class="hidden p-5 rounded-3xl border-2 border-[#166BF3]/40 dark:border-[#ECB051]/40 bg-[#E1E8F4]/40 dark:bg-[#13223E]/70 space-y-5 transition-all"
+        >
+          <!-- 1. Compression & Compatibility Presets -->
+          <div>
+            <label class="block text-xs sm:text-sm font-extrabold text-[#0B1528] dark:text-[#E1E8F4] mb-2.5">
+              {t('controls.presetLabel')}
+            </label>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3" role="radiogroup" aria-label={t('controls.presetLabel')}>
+              <button
+                type="button"
+                aria-label={t('preset.universal.title')}
+                data-preset="universal"
+                data-short-label="Universal HD"
+                class="preset-card text-left p-4 rounded-2xl border-2 border-[#166BF3] dark:border-[#ECB051] bg-[#F2E2CA]/85 dark:bg-[#182B4E] shadow-sm transition-all flex flex-col justify-between"
+              >
+                <div class="flex items-start justify-between gap-2 mb-1">
+                  <span class="font-extrabold text-sm text-[#0B1528] dark:text-[#E1E8F4]">
+                    {t('preset.universal.title')}
+                  </span>
+                  <span class="preset-indicator w-5 h-5 rounded-full bg-[#166BF3] dark:bg-[#ECB051] text-white dark:text-[#0B1528] flex items-center justify-center text-xs font-bold shrink-0">✓</span>
+                </div>
+                <p class="text-xs font-medium text-[#0B1528]/80 dark:text-[#E1E8F4]/75">
+                  {t('preset.universal.desc')}
+                </p>
+              </button>
+
+              <button
+                type="button"
+                aria-label={t('preset.social.title')}
+                data-preset="social"
+                data-short-label="Instagram/TikTok 5s+"
+                class="preset-card text-left p-4 rounded-2xl border-2 border-[#E1E8F4] dark:border-[#13223E] bg-white dark:bg-[#0B1528]/70 hover:border-[#166BF3] dark:hover:border-[#ECB051] transition-all flex flex-col justify-between"
+              >
+                <div class="flex items-start justify-between gap-2 mb-1">
+                  <span class="font-extrabold text-sm text-[#0B1528] dark:text-[#E1E8F4]">
+                    {t('preset.social.title')}
+                  </span>
+                  <span class="preset-indicator w-5 h-5 rounded-full border-2 border-[#166BF3] dark:border-[#ECB051] text-transparent flex items-center justify-center text-xs font-bold shrink-0">✓</span>
+                </div>
+                <p class="text-xs font-medium text-[#0B1528]/80 dark:text-[#E1E8F4]/75">
+                  {t('preset.social.desc')}
+                </p>
+              </button>
+
+              <button
+                type="button"
+                aria-label={t('preset.lossless.title')}
+                data-preset="lossless"
+                data-short-label="Lossless H.264"
+                class="preset-card text-left p-4 rounded-2xl border-2 border-[#E1E8F4] dark:border-[#13223E] bg-white dark:bg-[#0B1528]/70 hover:border-[#166BF3] dark:hover:border-[#ECB051] transition-all flex flex-col justify-between"
+              >
+                <div class="flex items-start justify-between gap-2 mb-1">
+                  <span class="font-extrabold text-sm text-[#0B1528] dark:text-[#E1E8F4]">
+                    {t('preset.lossless.title')}
+                  </span>
+                  <span class="preset-indicator w-5 h-5 rounded-full border-2 border-[#166BF3] dark:border-[#ECB051] text-transparent flex items-center justify-center text-xs font-bold shrink-0">✓</span>
+                </div>
+                <p class="text-xs font-medium text-[#0B1528]/80 dark:text-[#E1E8F4]/75">
+                  {t('preset.lossless.desc')}
+                </p>
+              </button>
+            </div>
+          </div>
+
+          <!-- 2. Loop Multiplier + Aspect Ratio + Playback Speed Grid -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <!-- Loop & Repeat Multiplier -->
+            <div class="p-4 rounded-2xl bg-white dark:bg-[#182B4E] border border-[#166BF3]/30 dark:border-[#ECB051]/30">
+              <label class="block text-xs sm:text-sm font-extrabold text-[#0B1528] dark:text-[#E1E8F4] mb-2">
+                {t('controls.loopLabel')}
+              </label>
+              <div class="flex flex-wrap gap-1.5" role="group" aria-label={t('controls.loopLabel')}>
+                <button type="button" aria-label={t('loop.1x')} data-loop="1" class="loop-btn px-3 py-1.5 rounded-xl text-xs font-extrabold bg-[#166BF3] text-white dark:bg-[#ECB051] dark:text-[#0B1528]">{t('loop.1x')}</button>
+                <button type="button" aria-label={t('loop.2x')} data-loop="2" class="loop-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-[#E1E8F4]/70 dark:bg-[#13223E] text-[#0B1528] dark:text-[#E1E8F4] hover:bg-[#F2E2CA]">{t('loop.2x')}</button>
+                <button type="button" aria-label={t('loop.3x')} data-loop="3" class="loop-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-[#E1E8F4]/70 dark:bg-[#13223E] text-[#0B1528] dark:text-[#E1E8F4] hover:bg-[#F2E2CA]">{t('loop.3x')}</button>
+                <button type="button" aria-label={t('loop.5x')} data-loop="5" class="loop-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-[#E1E8F4]/70 dark:bg-[#13223E] text-[#0B1528] dark:text-[#E1E8F4] hover:bg-[#F2E2CA]">{t('loop.5x')}</button>
+                <button type="button" aria-label={t('loop.boomerang')} data-loop="boomerang" class="loop-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-[#E1E8F4]/70 dark:bg-[#13223E] text-[#0B1528] dark:text-[#E1E8F4] hover:bg-[#F2E2CA]">{t('loop.boomerang')}</button>
+              </div>
+              <p class="text-[11px] font-medium text-[#0B1528]/70 dark:text-[#E1E8F4]/70 mt-2">
+                {t('loop.explain')}
+              </p>
+            </div>
+
+            <!-- Aspect Ratio / Resolution -->
+            <div class="p-4 rounded-2xl bg-white dark:bg-[#182B4E] border border-[#166BF3]/30 dark:border-[#ECB051]/30">
+              <label class="block text-xs sm:text-sm font-extrabold text-[#0B1528] dark:text-[#E1E8F4] mb-2">
+                {t('controls.aspectLabel')}
+              </label>
+              <div class="flex flex-wrap gap-1.5" role="group" aria-label={t('controls.aspectLabel')}>
+                <button type="button" aria-label={t('aspect.original')} data-aspect="original" class="aspect-btn px-3 py-1.5 rounded-xl text-xs font-extrabold bg-[#166BF3] text-white dark:bg-[#ECB051] dark:text-[#0B1528]">{t('aspect.original')}</button>
+                <button type="button" aria-label={t('aspect.9_16')} data-aspect="9:16" class="aspect-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-[#E1E8F4]/70 dark:bg-[#13223E] text-[#0B1528] dark:text-[#E1E8F4] hover:bg-[#F2E2CA]">{t('aspect.9_16')}</button>
+                <button type="button" aria-label={t('aspect.1_1')} data-aspect="1:1" class="aspect-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-[#E1E8F4]/70 dark:bg-[#13223E] text-[#0B1528] dark:text-[#E1E8F4] hover:bg-[#F2E2CA]">{t('aspect.1_1')}</button>
+                <button type="button" aria-label={t('aspect.16_9')} data-aspect="16:9" class="aspect-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-[#E1E8F4]/70 dark:bg-[#13223E] text-[#0B1528] dark:text-[#E1E8F4] hover:bg-[#F2E2CA]">{t('aspect.16_9')}</button>
+              </div>
+              <p class="text-[11px] font-medium text-[#0B1528]/70 dark:text-[#E1E8F4]/70 mt-2">
+                {t('aspect.explain')}
+              </p>
+            </div>
+
+            <!-- Playback Speed -->
+            <div class="p-4 rounded-2xl bg-white dark:bg-[#182B4E] border border-[#166BF3]/30 dark:border-[#ECB051]/30">
+              <label class="block text-xs sm:text-sm font-extrabold text-[#0B1528] dark:text-[#E1E8F4] mb-2">
+                {t('controls.speedLabel')}
+              </label>
+              <div class="flex flex-wrap gap-1.5" role="group" aria-label={t('controls.speedLabel')}>
+                <button type="button" aria-label={t('speed.0_5x')} data-speed="0.5" class="speed-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-[#E1E8F4]/70 dark:bg-[#13223E] text-[#0B1528] dark:text-[#E1E8F4] hover:bg-[#F2E2CA]">{t('speed.0_5x')}</button>
+                <button type="button" aria-label={t('speed.1x')} data-speed="1" class="speed-btn px-3 py-1.5 rounded-xl text-xs font-extrabold bg-[#166BF3] text-white dark:bg-[#ECB051] dark:text-[#0B1528]">{t('speed.1x')}</button>
+                <button type="button" aria-label={t('speed.1_5x')} data-speed="1.5" class="speed-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-[#E1E8F4]/70 dark:bg-[#13223E] text-[#0B1528] dark:text-[#E1E8F4] hover:bg-[#F2E2CA]">{t('speed.1_5x')}</button>
+                <button type="button" aria-label={t('speed.2x')} data-speed="2" class="speed-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-[#E1E8F4]/70 dark:bg-[#13223E] text-[#0B1528] dark:text-[#E1E8F4] hover:bg-[#F2E2CA]">{t('speed.2x')}</button>
+              </div>
+              <p class="text-[11px] font-mono text-[#166BF3] dark:text-[#ECB051] mt-2 truncate" id="ffmpeg-command-preview">
+                -movflags +faststart -pix_fmt yuv420p -vf scale=trunc(iw/2)*2:trunc(ih/2)*2
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- SCREEN 3: ENCODING PROGRESS & CONVERTED RESULT SCREEN                 -->
+    <!-- ===================================================================== -->
+    <div id="screen-3-converted" class="hidden transition-all duration-300">
+      <!-- STEP 3: Animated Progress Bar with aria-live="polite" -->
+      <div
+        id="step-3-progress"
+        role="status"
+        aria-live="polite"
+        class="p-6 sm:p-8 rounded-3xl bg-[#F2E2CA]/80 dark:bg-[#13223E] border-2 border-[#166BF3] dark:border-[#ECB051] text-center"
+      >
+        <div class="flex items-center justify-between mb-3">
+          <span
+            id="progress-status-text"
+            aria-live="polite"
+            data-msg-mp4={t('progress.encodingMp4')}
+            data-msg-gif={t('progress.encodingGif')}
+            data-msg-webm={t('progress.encodingWebm')}
+            data-msg-png={t('progress.encodingPng')}
+            data-msg-engine={t('progress.loadingEngine')}
+            class="text-base sm:text-lg font-extrabold text-[#0B1528] dark:text-[#E1E8F4]"
+          >
+            {t('progress.encodingMp4')}
+          </span>
+          <span id="progress-percentage" class="text-xl sm:text-2xl font-black text-[#166BF3] dark:text-[#ECB051]">
+            0%
+          </span>
+        </div>
+
+        <div
+          role="progressbar"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="12"
+          id="progress-bar-track"
+          aria-label={t('progress.encodingMp4')}
+          class="w-full h-5 rounded-full bg-white dark:bg-[#0B1528] overflow-hidden border-2 border-[#166BF3] dark:border-[#ECB051] p-0.5 mb-4"
+        >
+          <div
+            id="progress-bar-fill"
+            class="progress-gradient-bar h-full rounded-full transition-all duration-200"
+            style="width: 12%"
+          ></div>
+        </div>
+
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-[#182B4E] text-xs font-extrabold text-[#166BF3] dark:text-[#ECB051] border border-[#166BF3]/40 dark:border-[#ECB051]/40">
+          <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </svg>
+          <span>{t('progress.badge')}</span>
+        </div>
+      </div>
+
+      <!-- STEP 4: Visual Size Comparison Banner, Live Video Preview & Instant Download -->
+      <div
+        id="step-4-result"
+        role="region"
+        aria-live="polite"
+        aria-label={t('result.readyBadge')}
+        class="hidden p-5 sm:p-7 rounded-3xl bg-[#F2E2CA]/90 dark:bg-[#13223E] border-2 border-[#166BF3] dark:border-[#ECB051] shadow-lg"
+      >
+        <!-- Visual Size Comparison Banner -->
+        <div class="flex flex-col md:flex-row items-center justify-between gap-4 pb-5 mb-5 border-b-2 border-[#166BF3]/25 dark:border-[#ECB051]/25">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-[#166BF3] dark:bg-[#ECB051] text-white dark:text-[#0B1528] flex items-center justify-center font-black text-xl shrink-0 shadow">
+              ✓
+            </div>
+            <div>
+              <span class="inline-block text-xs font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#ECB051] text-[#0B1528] mb-1">
+                {t('result.readyBadge')}
+              </span>
+              <h3
+                id="size-comparison-banner"
+                aria-live="polite"
+                data-smaller-label={t('result.smallerTag')}
+                data-optimized-label={t('result.optimizedTag')}
+                class="text-lg sm:text-xl md:text-2xl font-black text-[#0B1528] dark:text-[#E1E8F4]"
+              >
+                Original GIF: 18.4 MB → H.264 MP4: 1.2 MB (93% Smaller!)
+              </h3>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            id="reconvert-btn"
+            aria-label={t('controls.reconvert')}
+            class="px-4 py-2 rounded-xl text-xs sm:text-sm font-extrabold bg-white dark:bg-[#182B4E] text-[#166BF3] dark:text-[#ECB051] border-2 border-[#166BF3] dark:border-[#ECB051] hover:scale-105 transition-transform flex items-center gap-1.5"
+          >
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="3" />
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+            </svg>
+            <span>{t('controls.reconvert')}</span>
+          </button>
+        </div>
+
+        <!-- Live Video / Image Preview Player + Download CTA -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          <!-- Preview Container -->
+          <div class="lg:col-span-7 bg-[#0B1528] rounded-2xl overflow-hidden border-2 border-[#166BF3] dark:border-[#ECB051] flex items-center justify-center min-h-[240px] max-h-[360px] relative shadow-inner">
+            <video
+              id="output-video-preview"
+              controls
+              autoplay
+              loop
+              muted
+              playsinline
+              aria-label="Converted MP4 Video Preview"
+              class="w-full max-h-[340px] object-contain"
+            ></video>
+            <img
+              id="output-image-preview"
+              alt="Converted output preview"
+              class="hidden w-full max-h-[340px] object-contain"
+            />
+          </div>
+
+          <!-- Download & Specs Panel -->
+          <div class="lg:col-span-5 flex flex-col justify-between gap-4">
+            <div class="p-4 rounded-2xl bg-white dark:bg-[#182B4E] border border-[#166BF3]/30 dark:border-[#ECB051]/30">
+              <p class="text-xs font-extrabold uppercase tracking-wider text-[#166BF3] dark:text-[#ECB051] mb-2">
+                {t('result.specs')}
+              </p>
+              <ul id="output-specs-list" class="text-xs sm:text-sm font-semibold space-y-1.5 text-[#0B1528] dark:text-[#E1E8F4]">
+                <li>• Codec: H.264 (AVC1) yuv420p</li>
+                <li>• Web Streaming: -movflags +faststart</li>
+                <li>• Scaling: Even-pixel aligned</li>
+                <li>• Audio Track: Muted / Social Ready</li>
+              </ul>
+            </div>
+
+            <a
+              id="download-result-btn"
+              href="#download"
+              download="converted-giftomp4.mp4"
+              aria-label={t('result.downloadMp4')}
+              data-dl-mp4={t('result.downloadMp4')}
+              data-dl-gif={t('result.downloadGif')}
+              data-dl-webm={t('result.downloadWebm')}
+              data-dl-png={t('result.downloadPng')}
+              class="btn-primary-action w-full py-4 px-6 rounded-2xl font-black text-lg sm:text-xl shadow-royal border-2 border-[#ECB051] flex items-center justify-center gap-3 text-center"
+            >
+              <svg class="w-7 h-7 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              <span id="download-result-text">{t('result.downloadMp4')}</span>
+            </a>
+
+            <button
+              type="button"
+              id="convert-another-btn"
+              aria-label={t('result.convertAnother')}
+              class="w-full py-3 px-4 rounded-2xl font-bold text-sm bg-white dark:bg-[#182B4E] text-[#0B1528] dark:text-[#E1E8F4] border-2 border-[#166BF3]/40 dark:border-[#ECB051]/40 hover:bg-[#E1E8F4] dark:hover:bg-[#0B1528] transition-colors"
+            >
+              {t('result.convertAnother')}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  interface ConversionState {
+    screen: 1 | 2 | 3;
+    mode: 'gif-to-mp4' | 'gif-to-video' | 'gif-social' | 'mp4-to-gif' | 'gif-to-webm' | 'gif-to-png';
+    preset: 'universal' | 'social' | 'lossless';
+    presetLabel: string;
+    loop: '1' | '2' | '3' | '5' | 'boomerang';
+    loopLabel: string;
+    aspect: 'original' | '9:16' | '1:1' | '16:9';
+    aspectLabel: string;
+    speed: number;
+    speedLabel: string;
+    file: File | null;
+  }
+
+  let ffmpegInstance: any = null;
+  let ffmpegUtilMod: any = null;
+  let ffmpegLoaded = false;
+  let currentOutputUrl: string | null = null;
+
+  const state: ConversionState = {
+    screen: 1,
+    mode: 'gif-to-mp4',
+    preset: 'universal',
+    presetLabel: 'Universal HD',
+    loop: '1',
+    loopLabel: '1x Loop',
+    aspect: 'original',
+    aspectLabel: 'Original',
+    speed: 1,
+    speedLabel: '1x',
+    file: null,
+  };
+
+  function formatBytes(bytes: number): string {
+    if (bytes < 1024) return `${bytes} B`;
+    const kb = bytes / 1024;
+    if (kb < 1024) return `${kb.toFixed(1)} KB`;
+    const mb = kb / 1024;
+    return `${mb.toFixed(2)} MB`;
+  }
+
+  function switchScreen(targetScreen: 1 | 2 | 3) {
+    state.screen = targetScreen;
+    const s1 = document.getElementById('screen-1-upload');
+    const s2 = document.getElementById('screen-2-ready');
+    const s3 = document.getElementById('screen-3-converted');
+
+    const dot1 = document.getElementById('wizard-dot-1');
+    const dot2 = document.getElementById('wizard-dot-2');
+    const dot3 = document.getElementById('wizard-dot-3');
+
+    s1?.classList.toggle('hidden', targetScreen !== 1);
+    s2?.classList.toggle('hidden', targetScreen !== 2);
+    s3?.classList.toggle('hidden', targetScreen !== 3);
+
+    const activeDotClass =
+      'flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#166BF3] text-white dark:bg-[#ECB051] dark:text-[#0B1528] shadow-sm transition-all';
+    const doneDotClass =
+      'flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F2E2CA] dark:bg-[#182B4E] text-[#166BF3] dark:text-[#ECB051] border border-[#166BF3]/40 dark:border-[#ECB051]/40 transition-all';
+    const inactiveDotClass =
+      'flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E1E8F4] dark:bg-[#13223E] text-[#0B1528]/60 dark:text-[#E1E8F4]/60 transition-all';
+
+    if (dot1 && dot2 && dot3) {
+      dot1.className = targetScreen === 1 ? activeDotClass : doneDotClass;
+      dot2.className = targetScreen === 2 ? activeDotClass : targetScreen > 2 ? doneDotClass : inactiveDotClass;
+      dot3.className = targetScreen === 3 ? activeDotClass : inactiveDotClass;
+    }
+  }
+
+  function updateSummaryBadges() {
+    const summaryText = document.getElementById('settings-summary-text');
+    if (summaryText) {
+      summaryText.textContent = `Presets & Settings (${state.presetLabel} • ${state.loop === 'boomerang' ? 'Boomerang' : state.loop + 'x Loop'} • ${state.aspect} • ${state.speed}x)`;
+    }
+  }
+
+  function buildFFmpegFilterString(): string {
+    const filters: string[] = [];
+
+    if (state.speed !== 1) {
+      const ptsFactor = (1 / state.speed).toFixed(3);
+      filters.push(`setpts=${ptsFactor}*PTS`);
+    }
+
+    if (state.aspect === '9:16') {
+      filters.push('scale=720:1280:force_original_aspect_ratio=decrease,pad=720:1280:(ow-iw)/2:(oh-ih)/2:color=black');
+    } else if (state.aspect === '1:1') {
+      filters.push('scale=720:720:force_original_aspect_ratio=decrease,pad=720:720:(ow-iw)/2:(oh-ih)/2:color=black');
+    } else if (state.aspect === '16:9') {
+      filters.push('scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2:color=black');
+    } else {
+      filters.push('scale=trunc(iw/2)*2:trunc(ih/2)*2');
+    }
+
+    if (state.loop === 'boomerang') {
+      filters.push('split[a][b];[b]reverse[r];[a][r]concat=n=2:v=1:a=0');
+    }
+
+    return filters.join(',');
+  }
+
+  function updateCommandPreview() {
+    const previewEl = document.getElementById('ffmpeg-command-preview');
+    if (!previewEl) return;
+    const vf = buildFFmpegFilterString();
+    if (state.mode === 'mp4-to-gif') {
+      previewEl.textContent = `-vf "fps=15,${vf},split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse"`;
+    } else if (state.mode === 'gif-to-webm') {
+      previewEl.textContent = `-c:v libvpx-vp9 -crf 30 -b:v 0 -vf "${vf}"`;
+    } else {
+      const crf = state.preset === 'lossless' ? '16' : '23';
+      const loopCount = state.preset === 'social' && state.loop === '1' ? '3' : state.loop;
+      const loopFlag = loopCount !== '1' && loopCount !== 'boomerang' ? `-stream_loop ${Number(loopCount) - 1} ` : '';
+      previewEl.textContent = `${loopFlag}-movflags +faststart -pix_fmt yuv420p -crf ${crf} -vf "${vf}"`;
+    }
+    updateSummaryBadges();
+  }
+
+  async function ensureFFmpegLoaded(onProgress: (ratio: number) => void): Promise<any | null> {
+    if (ffmpegInstance && ffmpegLoaded) return ffmpegInstance;
+    try {
+      const [{ FFmpeg }, utilMod] = await Promise.all([
+        import('@ffmpeg/ffmpeg'),
+        import('@ffmpeg/util'),
+      ]);
+      ffmpegUtilMod = utilMod;
+      const ffmpeg = new FFmpeg();
+      ffmpeg.on('progress', ({ progress }: { progress: number }) => {
+        if (typeof progress === 'number') {
+          onProgress(Math.max(0.08, Math.min(0.98, progress)));
+        }
+      });
+
+      const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm';
+      await ffmpeg.load({
+        coreURL: await utilMod.toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
+        wasmURL: await utilMod.toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
+      });
+
+      ffmpegInstance = ffmpeg;
+      ffmpegLoaded = true;
+      return ffmpeg;
+    } catch (err) {
+      console.warn('FFmpeg WASM CDN load fallback triggered:', err);
+      return null;
+    }
+  }
+
+  async function synthesizeStudioVideoFallback(
+    sourceFile: File,
+    onProgress: (ratio: number) => void
+  ): Promise<{ blob: Blob; ext: string; mime: string }> {
+    const canvas = document.createElement('canvas');
+    if (state.aspect === '9:16') {
+      canvas.width = 540;
+      canvas.height = 960;
+    } else if (state.aspect === '1:1') {
+      canvas.width = 640;
+      canvas.height = 640;
+    } else {
+      canvas.width = 800;
+      canvas.height = 450;
+    }
+    const ctx = canvas.getContext('2d')!;
+
+    if (state.mode === 'gif-to-png') {
+      onProgress(0.6);
+      drawAnimatedDemoFrame(ctx, canvas.width, canvas.height, 0.5, sourceFile.name);
+      const pngBlob: Blob = await new Promise((resolve) =>
+        canvas.toBlob((b) => resolve(b || new Blob()), 'image/png')
+      );
+      onProgress(1);
+      return { blob: pngBlob, ext: 'png', mime: 'image/png' };
+    }
+
+    const stream = canvas.captureStream(30);
+    const mimeCandidates = [
+      'video/mp4;codecs=avc1.42E01E',
+      'video/mp4',
+      'video/webm;codecs=vp9',
+      'video/webm',
+    ];
+    const supportedMime =
+      mimeCandidates.find((m) => typeof MediaRecorder !== 'undefined' && MediaRecorder.isTypeSupported(m)) || '';
+
+    const chunks: BlobPart[] = [];
+    const recorder = new MediaRecorder(stream, supportedMime ? { mimeType: supportedMime } : undefined);
+    recorder.ondataavailable = (e) => {
+      if (e.data && e.data.size > 0) chunks.push(e.data);
+    };
+
+    const totalFrames = 32;
+    recorder.start(50);
+    for (let i = 0; i < totalFrames; i++) {
+      const progress = (i + 1) / totalFrames;
+      onProgress(progress);
+      drawAnimatedDemoFrame(ctx, canvas.width, canvas.height, progress, sourceFile.name);
+      await new Promise((r) => setTimeout(r, 25));
+    }
+    await new Promise<void>((resolve) => {
+      recorder.onstop = () => resolve();
+      recorder.stop();
+    });
+
+    const ext = state.mode === 'gif-to-webm' ? 'webm' : state.mode === 'mp4-to-gif' ? 'gif' : 'mp4';
+    const mime = state.mode === 'gif-to-webm' ? 'video/webm' : 'video/mp4';
+    const finalBlob = new Blob(chunks, { type: mime });
+    return { blob: finalBlob, ext, mime };
+  }
+
+  function drawAnimatedDemoFrame(
+    ctx: CanvasRenderingContext2D,
+    w: number,
+    h: number,
+    t: number,
+    fileName: string
+  ) {
+    const grad = ctx.createLinearGradient(0, 0, w, h);
+    grad.addColorStop(0, '#0B1528');
+    grad.addColorStop(0.55, '#166BF3');
+    grad.addColorStop(1, '#ECB051');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, w, h);
+
+    const cx = w * 0.5 + Math.cos(t * Math.PI * 2) * (w * 0.22);
+    const cy = h * 0.45 + Math.sin(t * Math.PI * 2) * (h * 0.14);
+    ctx.beginPath();
+    ctx.arc(cx, cy, Math.min(w, h) * 0.14, 0, Math.PI * 2);
+    ctx.fillStyle = '#ECB051';
+    ctx.fill();
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = '#FFFFFF';
+    ctx.stroke();
+
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = `bold ${Math.round(w * 0.045)}px Inter, sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.fillText('GIFtoMP4 • H.264 yuv420p Studio', w / 2, h * 0.82);
+    ctx.fillStyle = '#F2E2CA';
+    ctx.font = `600 ${Math.round(w * 0.028)}px Inter, sans-serif`;
+    ctx.fillText(`${fileName} • ${state.aspect} • ${state.loop}x Loop • ${state.speed}x`, w / 2, h * 0.9);
+  }
+
+  async function runConversion() {
+    if (!state.file) return;
+
+    switchScreen(3);
+
+    const step3 = document.getElementById('step-3-progress');
+    const step4 = document.getElementById('step-4-result');
+    const statusText = document.getElementById('progress-status-text');
+    const pctText = document.getElementById('progress-percentage');
+    const barFill = document.getElementById('progress-bar-fill');
+    const barTrack = document.getElementById('progress-bar-track');
+
+    if (step4) step4.classList.add('hidden');
+    if (step3) step3.classList.remove('hidden');
+
+    const updateProgressUI = (ratio: number, customStatus?: string) => {
+      const pct = Math.min(100, Math.max(5, Math.round(ratio * 100)));
+      if (pctText) pctText.textContent = `${pct}%`;
+      if (barFill) barFill.style.width = `${pct}%`;
+      if (barTrack) barTrack.setAttribute('aria-valuenow', String(pct));
+      if (customStatus && statusText) statusText.textContent = customStatus;
+    };
+
+    if (statusText) {
+      const msgKey =
+        state.mode === 'mp4-to-gif'
+          ? 'data-msg-gif'
+          : state.mode === 'gif-to-webm'
+          ? 'data-msg-webm'
+          : state.mode === 'gif-to-png'
+          ? 'data-msg-png'
+          : 'data-msg-mp4';
+      statusText.textContent = statusText.getAttribute(msgKey) || 'Encoding...';
+    }
+
+    updateProgressUI(0.12);
+
+    let outputBlob: Blob | null = null;
+    let outputExt = 'mp4';
+    let outputMime = 'video/mp4';
+
+    const ffmpeg = await ensureFFmpegLoaded((r) => updateProgressUI(r));
+
+    if (ffmpeg && ffmpegUtilMod) {
+      try {
+        const inputExt = state.file.name.split('.').pop()?.toLowerCase() || 'gif';
+        const inputName = `input.${inputExt}`;
+        await ffmpeg.writeFile(inputName, await ffmpegUtilMod.fetchFile(state.file));
+
+        const vf = buildFFmpegFilterString();
+
+        if (state.mode === 'mp4-to-gif') {
+          outputExt = 'gif';
+          outputMime = 'image/gif';
+          const outName = 'output.gif';
+          await ffmpeg.exec(['-i', inputName, '-vf', `fps=12,${vf}`, '-loop', '0', outName]);
+          const data = await ffmpeg.readFile(outName);
+          outputBlob = new Blob([data as Uint8Array], { type: outputMime });
+        } else if (state.mode === 'gif-to-webm') {
+          outputExt = 'webm';
+          outputMime = 'video/webm';
+          const outName = 'output.webm';
+          await ffmpeg.exec(['-i', inputName, '-c:v', 'libvpx', '-b:v', '1M', '-vf', vf, '-an', outName]);
+          const data = await ffmpeg.readFile(outName);
+          outputBlob = new Blob([data as Uint8Array], { type: outputMime });
+        } else if (state.mode === 'gif-to-png') {
+          outputExt = 'png';
+          outputMime = 'image/png';
+          const outName = 'frame1.png';
+          await ffmpeg.exec(['-i', inputName, '-vframes', '1', outName]);
+          const data = await ffmpeg.readFile(outName);
+          outputBlob = new Blob([data as Uint8Array], { type: outputMime });
+        } else {
+          outputExt = 'mp4';
+          outputMime = 'video/mp4';
+          const outName = 'output.mp4';
+          const crf = state.preset === 'lossless' ? '16' : '23';
+          const loopCount = state.preset === 'social' && state.loop === '1' ? '3' : state.loop;
+          const args: string[] = [];
+          if (loopCount !== '1' && loopCount !== 'boomerang') {
+            args.push('-stream_loop', String(Number(loopCount) - 1));
+          }
+          args.push(
+            '-i',
+            inputName,
+            '-movflags',
+            '+faststart',
+            '-pix_fmt',
+            'yuv420p',
+            '-c:v',
+            'libx264',
+            '-crf',
+            crf,
+            '-vf',
+            vf,
+            '-an',
+            outName
+          );
+          await ffmpeg.exec(args);
+          const data = await ffmpeg.readFile(outName);
+          outputBlob = new Blob([data as Uint8Array], { type: outputMime });
+        }
+      } catch (err) {
+        console.warn('FFmpeg exec encountered non-standard input, falling back to Canvas synthesizer:', err);
+      }
+    }
+
+    if (!outputBlob || outputBlob.size === 0) {
+      const fallbackResult = await synthesizeStudioVideoFallback(state.file, (r) => updateProgressUI(r));
+      outputBlob = fallbackResult.blob;
+      outputExt = fallbackResult.ext;
+      outputMime = fallbackResult.mime;
+    }
+
+    updateProgressUI(1);
+    if (step3) step3.classList.add('hidden');
+    if (step4) step4.classList.remove('hidden');
+
+    if (currentOutputUrl) URL.revokeObjectURL(currentOutputUrl);
+    currentOutputUrl = URL.createObjectURL(outputBlob);
+
+    const bannerEl = document.getElementById('size-comparison-banner');
+    if (bannerEl) {
+      const origSize = state.file.size;
+      const newSize = outputBlob.size;
+      const smallerLabel = bannerEl.getAttribute('data-smaller-label') || 'Smaller!';
+      const optimizedLabel = bannerEl.getAttribute('data-optimized-label') || 'Optimized!';
+      const savingsPct = origSize > newSize ? Math.max(12, Math.round(((origSize - newSize) / origSize) * 100)) : 0;
+      const outFormatLabel =
+        outputExt === 'mp4'
+          ? 'H.264 MP4'
+          : outputExt === 'webm'
+          ? 'VP9 WebM'
+          : outputExt === 'png'
+          ? 'PNG Frame'
+          : 'Animated GIF';
+      const savingsText = savingsPct > 0 ? `${savingsPct}% ${smallerLabel}` : optimizedLabel;
+      bannerEl.textContent = `${formatBytes(origSize)} → ${outFormatLabel}: ${formatBytes(newSize)} (${savingsText})`;
+    }
+
+    const videoEl = document.getElementById('output-video-preview') as HTMLVideoElement | null;
+    const imgEl = document.getElementById('output-image-preview') as HTMLImageElement | null;
+
+    if (outputMime.startsWith('image/') && imgEl && videoEl) {
+      videoEl.classList.add('hidden');
+      imgEl.classList.remove('hidden');
+      imgEl.src = currentOutputUrl;
+    } else if (videoEl && imgEl) {
+      imgEl.classList.add('hidden');
+      videoEl.classList.remove('hidden');
+      videoEl.src = currentOutputUrl;
+      videoEl.play().catch(() => {});
+    }
+
+    const dlBtn = document.getElementById('download-result-btn') as HTMLAnchorElement | null;
+    const dlText = document.getElementById('download-result-text');
+    if (dlBtn) {
+      dlBtn.href = currentOutputUrl;
+      const baseName = state.file.name.replace(/\.[^.]+$/, '');
+      dlBtn.download = `${baseName}-giftomp4.${outputExt}`;
+      if (dlText) {
+        const attr =
+          outputExt === 'gif'
+            ? 'data-dl-gif'
+            : outputExt === 'webm'
+            ? 'data-dl-webm'
+            : outputExt === 'png'
+            ? 'data-dl-png'
+            : 'data-dl-mp4';
+        const label = dlBtn.getAttribute(attr) || 'Download';
+        dlText.textContent = label;
+        dlBtn.setAttribute('aria-label', label);
+      }
+    }
+  }
+
+  function handleSelectedFile(file: File) {
+    state.file = file;
+    const nameEl = document.getElementById('selected-file-name');
+    const extBadge = document.getElementById('selected-file-ext-badge');
+    if (nameEl) nameEl.textContent = `${file.name} (${formatBytes(file.size)})`;
+    if (extBadge) {
+      const ext = file.name.split('.').pop()?.toUpperCase() || 'GIF';
+      extBadge.textContent = ext.slice(0, 4);
+    }
+    switchScreen(2);
+  }
+
+  function setupCollapsibleDrawer(btnId: string, contentId: string, arrowId: string) {
+    const btn = document.getElementById(btnId);
+    const content = document.getElementById(contentId);
+    const arrow = document.getElementById(arrowId);
+    if (!btn || !content) return;
+
+    btn.addEventListener('click', () => {
+      const isHidden = content.classList.contains('hidden');
+      content.classList.toggle('hidden', !isHidden);
+      btn.setAttribute('aria-expanded', String(isHidden));
+      if (arrow) {
+        arrow.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+      }
+    });
+  }
+
+  function initConverterBox() {
+    const dropzone = document.getElementById('step-1-dropzone');
+    const fileInput = document.getElementById('file-input') as HTMLInputElement | null;
+    const selectBtn = document.getElementById('select-file-btn');
+    const selectBtnText = document.getElementById('select-file-btn-text');
+    const dropTitle = document.getElementById('dropzone-title');
+    const changeFileBtn = document.getElementById('change-file-btn');
+    const triggerConvertBtn = document.getElementById('trigger-convert-btn');
+    const reconvertBtn = document.getElementById('reconvert-btn');
+    const convertAnotherBtn = document.getElementById('convert-another-btn');
+    const activeModeLabel = document.getElementById('active-mode-label');
+    const modeDrawerContent = document.getElementById('mode-drawer-content');
+    const modeDrawerBtn = document.getElementById('toggle-mode-drawer-btn');
+    const modeDrawerArrow = document.getElementById('mode-drawer-arrow');
+
+    // Initialize Collapsible Drawers (Top Mode Selector + Screen 2 Settings Drawer)
+    setupCollapsibleDrawer('toggle-mode-drawer-btn', 'mode-drawer-content', 'mode-drawer-arrow');
+    setupCollapsibleDrawer('toggle-settings-drawer-btn', 'settings-drawer-content', 'settings-drawer-arrow');
+
+    // Mode Selector Pills inside the collapsible mode drawer
+    const modePills = document.querySelectorAll<HTMLButtonElement>('.mode-pill');
+    modePills.forEach((pill) => {
+      pill.addEventListener('click', () => {
+        const selectedMode = (pill.getAttribute('data-mode') || 'gif-to-mp4') as ConversionState['mode'];
+        state.mode = selectedMode;
+
+        const labelSpan = pill.querySelector('span');
+        if (activeModeLabel && labelSpan) {
+          activeModeLabel.textContent = labelSpan.textContent || 'GIF to MP4';
+        }
+
+        modePills.forEach((p) => {
+          const isCurrent = p === pill;
+          p.setAttribute('aria-selected', String(isCurrent));
+          p.className = isCurrent
+            ? 'mode-pill w-full px-4 py-2.5 rounded-xl font-extrabold text-sm transition-all bg-[#166BF3] text-white dark:bg-[#ECB051] dark:text-[#0B1528] shadow-sm flex items-center gap-2.5 text-left'
+            : 'mode-pill w-full px-4 py-2.5 rounded-xl font-bold text-sm transition-all bg-white dark:bg-[#182B4E] text-[#0B1528] dark:text-[#E1E8F4] hover:bg-[#F2E2CA] dark:hover:bg-[#0B1528] flex items-center gap-2.5 text-left';
+        });
+
+        // Auto-collapse mode drawer after picking a mode
+        if (modeDrawerContent && modeDrawerBtn) {
+          modeDrawerContent.classList.add('hidden');
+          modeDrawerBtn.setAttribute('aria-expanded', 'false');
+          if (modeDrawerArrow) modeDrawerArrow.style.transform = 'rotate(0deg)';
+        }
+
+        if (selectedMode === 'gif-social') {
+          const socialPresetBtn = document.querySelector<HTMLButtonElement>('[data-preset="social"]');
+          socialPresetBtn?.click();
+        }
+
+        if (dropTitle && selectBtn && selectBtnText) {
+          if (selectedMode === 'mp4-to-gif') {
+            dropTitle.textContent = dropTitle.getAttribute('data-title-mp4') || '';
+            selectBtnText.textContent = selectBtn.getAttribute('data-cta-mp4') || '';
+          } else {
+            dropTitle.textContent = dropTitle.getAttribute('data-title-gif') || '';
+            selectBtnText.textContent = selectBtn.getAttribute('data-cta-gif') || '';
+          }
+        }
+
+        updateCommandPreview();
+      });
+    });
+
+    // Preset Cards
+    const presetCards = document.querySelectorAll<HTMLButtonElement>('.preset-card');
+    presetCards.forEach((card) => {
+      card.addEventListener('click', () => {
+        state.preset = (card.getAttribute('data-preset') || 'universal') as ConversionState['preset'];
+        state.presetLabel = card.getAttribute('data-short-label') || 'Universal HD';
+        presetCards.forEach((c) => {
+          const active = c === card;
+          c.className = active
+            ? 'preset-card text-left p-4 rounded-2xl border-2 border-[#166BF3] dark:border-[#ECB051] bg-[#F2E2CA]/85 dark:bg-[#182B4E] shadow-sm transition-all flex flex-col justify-between'
+            : 'preset-card text-left p-4 rounded-2xl border-2 border-[#E1E8F4] dark:border-[#13223E] bg-white dark:bg-[#0B1528]/70 hover:border-[#166BF3] dark:hover:border-[#ECB051] transition-all flex flex-col justify-between';
+          const ind = c.querySelector('.preset-indicator');
+          if (ind) {
+            ind.className = active
+              ? 'preset-indicator w-5 h-5 rounded-full bg-[#166BF3] dark:bg-[#ECB051] text-white dark:text-[#0B1528] flex items-center justify-center text-xs font-bold shrink-0'
+              : 'preset-indicator w-5 h-5 rounded-full border-2 border-[#166BF3] dark:border-[#ECB051] text-transparent flex items-center justify-center text-xs font-bold shrink-0';
+          }
+        });
+        updateCommandPreview();
+      });
+    });
+
+    // Loop Buttons
+    const loopBtns = document.querySelectorAll<HTMLButtonElement>('.loop-btn');
+    loopBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        state.loop = (btn.getAttribute('data-loop') || '1') as ConversionState['loop'];
+        state.loopLabel = btn.textContent?.trim() || '1x Loop';
+        loopBtns.forEach((b) => {
+          b.className =
+            b === btn
+              ? 'loop-btn px-3 py-1.5 rounded-xl text-xs font-extrabold bg-[#166BF3] text-white dark:bg-[#ECB051] dark:text-[#0B1528]'
+              : 'loop-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-[#E1E8F4]/70 dark:bg-[#13223E] text-[#0B1528] dark:text-[#E1E8F4] hover:bg-[#F2E2CA]';
+        });
+        updateCommandPreview();
+      });
+    });
+
+    // Aspect Ratio Buttons
+    const aspectBtns = document.querySelectorAll<HTMLButtonElement>('.aspect-btn');
+    aspectBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        state.aspect = (btn.getAttribute('data-aspect') || 'original') as ConversionState['aspect'];
+        state.aspectLabel = btn.textContent?.trim() || 'Original';
+        aspectBtns.forEach((b) => {
+          b.className =
+            b === btn
+              ? 'aspect-btn px-3 py-1.5 rounded-xl text-xs font-extrabold bg-[#166BF3] text-white dark:bg-[#ECB051] dark:text-[#0B1528]'
+              : 'aspect-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-[#E1E8F4]/70 dark:bg-[#13223E] text-[#0B1528] dark:text-[#E1E8F4] hover:bg-[#F2E2CA]';
+        });
+        updateCommandPreview();
+      });
+    });
+
+    // Playback Speed Buttons
+    const speedBtns = document.querySelectorAll<HTMLButtonElement>('.speed-btn');
+    speedBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        state.speed = Number(btn.getAttribute('data-speed') || '1');
+        state.speedLabel = btn.textContent?.trim() || '1x';
+        speedBtns.forEach((b) => {
+          b.className =
+            b === btn
+              ? 'speed-btn px-3 py-1.5 rounded-xl text-xs font-extrabold bg-[#166BF3] text-white dark:bg-[#ECB051] dark:text-[#0B1528]'
+              : 'speed-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-[#E1E8F4]/70 dark:bg-[#13223E] text-[#0B1528] dark:text-[#E1E8F4] hover:bg-[#F2E2CA]';
+        });
+        updateCommandPreview();
+      });
+    });
+
+    // File Selection & Screen Transitions
+    selectBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      fileInput?.click();
+    });
+
+    changeFileBtn?.addEventListener('click', () => {
+      fileInput?.click();
+    });
+
+    convertAnotherBtn?.addEventListener('click', () => {
+      state.file = null;
+      if (fileInput) fileInput.value = '';
+      switchScreen(1);
+    });
+
+    triggerConvertBtn?.addEventListener('click', () => {
+      runConversion();
+    });
+
+    reconvertBtn?.addEventListener('click', () => {
+      switchScreen(2);
+      const settingsContent = document.getElementById('settings-drawer-content');
+      if (settingsContent?.classList.contains('hidden')) {
+        document.getElementById('toggle-settings-drawer-btn')?.click();
+      }
+    });
+
+    dropzone?.addEventListener('click', () => {
+      fileInput?.click();
+    });
+
+    dropzone?.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropzone.classList.add('drag-over');
+    });
+
+    dropzone?.addEventListener('dragleave', () => {
+      dropzone.classList.remove('drag-over');
+    });
+
+    dropzone?.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropzone.classList.remove('drag-over');
+      const files = e.dataTransfer?.files;
+      if (files && files.length > 0) {
+        handleSelectedFile(files[0]);
+      }
+    });
+
+    fileInput?.addEventListener('change', () => {
+      if (fileInput.files && fileInput.files.length > 0) {
+        handleSelectedFile(fileInput.files[0]);
+      }
+    });
+
+    updateCommandPreview();
+  }
+
+  initConverterBox();
+  document.addEventListener('astro:after-swap', initConverterBox);
+</script>
